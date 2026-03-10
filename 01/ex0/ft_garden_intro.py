@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-class my_status:
+class Plant:
     def __init__(self, plant="Rose", height=25, age=30):
         self.plant = plant
         self.height = height
@@ -9,10 +9,11 @@ class my_status:
     def print_status(self):
         print("Plant: ", self.plant)
         print(f"Height: {self.height}cm")
-        print(f"Age: {self.age} days\n")
+        print(f"Age: {self.age} days")
+
 
 if __name__ == "__main__":
     print("=== Welcome to My Garden ===")
-    plant1 = my_status()
+    plant1 = Plant()
     plant1.print_status()
-    print("=== End of Program ===")
+    print("\n=== End of Program ===")
