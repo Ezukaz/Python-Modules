@@ -51,7 +51,7 @@ Plant                               ← base class
 
 4. Encapsulation<br>[カプセル化と情報隠蔽](https://note.com/parklabs/n/n6a5e4181e427)<br>[ゲッター・セッターの利用](https://tech.pjin.jp/blog/2021/07/27/python_13_7/)
     > **kataPoint:**<br>
-    Encapsulation, to place a variable in a protective capsule that restricts access. I would think this means using const, protected, or private. Python does not have these strict encapsulation techniques. `_` before a name is naming a name with a flag to yourself as a reminder that this shouldn't be changed lightly. `__` will convert the name to a special format, `_Class__name`. In order to change the variable, you must put in this full-name. This forces you to be very deliberate with what you do.
+    Encapsulation, to place a variable in a protective capsule that restricts access. I would think this means using const, protected, or private. Python does not have these strict encapsulation techniques. `_` before a name is naming a name with a flag to yourself as a reminder that this shouldn't be changed lightly. `__` will convert the name to a special format, `_Class__name`. In order to change the variable, you must put in this full-name. This forces you to be very deliberate with what you do. Rule of thumb: use `_` when a child needs access to the value, and `__` when you want it locked in that class
 
 5. Inheritance<br>[クラスの継承](https://qiita.com/nyunyu122/items/9d7395f3d4de4190a991)<br>[super()についてハッキリさせる](https://qiita.com/max_marketter/items/f88150e40fe429f3dafd)<br>[ポリモーフィズムはいいぞ](https://qiita.com/Akatsuki_py/items/3e35ba326ff254a6790d)<br>[class名を取得する(インスタンスを作らずに)](https://qiita.com/meganeo/items/f183982a169059fb4949)
     > **kataPoint:**<br>

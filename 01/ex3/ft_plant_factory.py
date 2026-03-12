@@ -1,12 +1,20 @@
 #!/usr/bin/env python3
 
 class Plant:
-    def __init__(self, plant="Rose", height=25, age=30):
+    """Make plant instance and print status"""
+    def __init__(
+        self,
+        plant: str = "Rose",
+        height: int = 25,
+        age: int = 30
+    ) -> None:
+        """Initialize plant with name, height (cm), and age (days)"""
         self.plant = plant
         self.height = height
         self.age = age
 
-    def print_status(self):
+    def print_status(self) -> None:
+        """Print plant status"""
         print(f"Created: {self.plant} ({self.height}cm, {self.age} days)")
 
 
