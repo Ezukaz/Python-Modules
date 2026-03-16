@@ -6,14 +6,14 @@
 
 Learn the basics of error handling by using the Exception class.
 
-## Learn from Each Module
+## Learn from Each Assignment
 
 1. **ex0 - Exception with try/except**
 2. **ex1 - Different Kinds of exceptions**
 3. **ex2 - Custom Exceptions**
 4. **ex3 - **
 5. **ex4 - **
-6. **ex5 - **
+6. **ex5 - All together now**
 
 ## Resources
 

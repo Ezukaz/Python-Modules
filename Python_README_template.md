@@ -6,7 +6,7 @@
 
 #### 
 
-## Learn from Each Module
+## Learn from Each Assignment
 
 1. **ex0 - **
 2. **ex1 - **

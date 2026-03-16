@@ -7,7 +7,7 @@
 #### An introduction to OOP (object oriented programming)
 You will learn about classes and how to use them to create wonderful scalable code that makes management easier.<br>Easy management = wonderful day.<br>Happy coding!
 
-## Learn from Each Module
+## Learn from Each Assignment
 
 1. **ex0 - How to make an instance from a class**
 2. **ex1 - How a class is used to make different instances**

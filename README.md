@@ -14,7 +14,7 @@ touch ex{0..6}/ft_garden_*.py  # exact filenames from subject
 
 1. Module 00 - Functions
 2. Module 01 - Classes
-3. Module 02 - 
+3. Module 02 - Exceptions
 4. Module 03 - 
 5. Module 04 - 
 6. Module 05 - 
