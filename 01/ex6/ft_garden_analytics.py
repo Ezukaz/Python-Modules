@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 
 class Garden:
+    """Make garden instance, add plants to it, grow them, and print stats"""
     def __init__(
         self,
         total_growth: int = 0,
         owner: str = "Noname",
+        feeling: str = "Happy",
         is_valid_height: bool = True,
     ) -> None:
         self._plants = {
-            "regular": [None] * 10,
-            "bloom": [None] * 10,
-            "prize": [None] * 10
+            "regular": [None] * 10,  # .append() is good to add dynamicly
+            "bloom": [None] * 10,  # It uses realloc in the background
+            "prize": [None] * 10  # Can't use it here, and it is heavy
         }
         self._counts = {
             "regular": 0,
@@ -19,32 +21,50 @@ class Garden:
         }
         self._total_growth = total_growth
         self.owner = owner
+        self.feeling = feeling
         self._is_valid_height = is_valid_height
 
     def add_plant(self, plant: 'Plant', category: str) -> bool:
+        """Add plants to garden if height is valid"""
         self._is_valid_height = GardenManager.is_height(plant._height)
         if self._is_valid_height:
             self._plants[category][self._counts[category]] = plant
             self._counts[category] += 1
             print(f"Added {plant.name} to {self.owner}'s garden")
         else:
-            print("Could not add null height plant")
+            print(f"Could not add null height {plant.name}")
         return self._is_valid_height
 
     def grow_all(self) -> None:
+        """
+        Grow all plants if owner is 'happy' or 'busy', and has plants.
+        Otherwise, print feedback message
+        """
         print()
         print(f"{self.owner} is helping all plants to grow...")
-        has_plant = 0
-        for category in ["regular", "bloom", "prize"]:
-            for plant in range(self._counts[category]):
-                self._plants[category][plant].grow()
-                self._plants[category][plant].print_growth()
-                self._total_growth += 1
-                has_plant = 1
-        if not has_plant:
+        if self.feeling == "happy" or self.feeling == "busy":
+            if self.feeling == "happy":
+                growth_pace = 3
+            else:
+                growth_pace = 1
+            has_plant = False
+            for category in ["regular", "bloom", "prize"]:
+                for plant in range(self._counts[category]):
+                    self._plants[category][plant].grow(growth_pace)
+                    self._plants[category][plant].print_growth(growth_pace)
+                    self._total_growth += growth_pace
+                    has_plant = True
+            if not has_plant:
+                print("or not (T_T)")
+            else:
+                print(f"because {self.owner} is {self.feeling}!")
+        elif self.feeling == "stressed":
+            print(f"but not today... {self.owner} is {self.feeling} (T_T)")
+        else:
             print("but not today (T_T)")
 
     def print_report(self) -> None:
+        """Print stats of garden"""
         total_score = (
             self._counts['regular'] +
             self._counts['bloom'] +
@@ -69,12 +89,17 @@ class Garden:
 
 
 class GardenManager:
-    def __init__(self):
+    """
+    Manage gardens by creating network, adding gardens to it,
+    and calculating garden stats
+    """
+    def __init__(self) -> None:
         self._gardens = [None] * 5
         self._garden_count = 0
         self._all_height_valid = True
 
     class GardenStats:
+        """Calculate score of each garden, and print the network stats"""
         @staticmethod
         def calc_score(garden: 'Garden') -> int:
             score = 0
@@ -88,7 +113,7 @@ class GardenManager:
             return score
 
         @staticmethod
-        def print_total_stats(manager: 'GardenManager'):
+        def print_network_stats(manager: 'GardenManager') -> None:
             score_str = ""
             total_sum = 0
 
@@ -104,6 +129,7 @@ class GardenManager:
                 score_str += f"{garden.owner}: {garden_score}"
 
             print()
+            print("=== Garden Network Report ===")
             print(f"Height validation test: {manager._all_height_valid}")
             print(f"Garden scores - {score_str}")
             print(f"Total network score: {total_sum}")
@@ -119,7 +145,7 @@ class GardenManager:
         manager = cls()
 
         alice_garden = Garden(owner="Alice")
-        bob_garden = Garden(owner="Bob")
+        bob_garden = Garden(owner="Bob", feeling="happy")
         manager.add_garden(alice_garden)
         manager.add_garden(bob_garden)
 
@@ -143,18 +169,21 @@ class GardenManager:
 
     @staticmethod
     def is_height(height: int) -> bool:
+        """Check if height is positive number"""
         if height > 0:
             return True
         return False
 
 
 class Plant:
+    """Build regular plant, grow it, and print growth & status"""
     def __init__(self, name: str = "Oak tree", height: int = 100) -> None:
         self.name = name
         self._height = height
         self.prize_pts = 0
 
     def get_info(self) -> str:
+        """Polymorphic string builder for plant status"""
         return f"- {self.name}: {self._height}cm"
 
     def get_height(self) -> int:
@@ -163,14 +192,15 @@ class Plant:
     def print_status(self) -> None:
         print(self.get_info())
 
-    def grow(self) -> None:
-        self._height += 1
+    def grow(self, pace: int) -> None:
+        self._height += pace
 
-    def print_growth(self) -> None:
-        print(f"{self.name} grew 1cm")
+    def print_growth(self, pace: int) -> None:
+        print(f"{self.name} grew {pace}cm")
 
 
 class FloweringPlant(Plant):
+    """Build flowering plant"""
     def __init__(
         self,
         name: str = "Rose",
@@ -183,10 +213,12 @@ class FloweringPlant(Plant):
         self.state = state
 
     def get_info(self) -> str:
+        """Polymorphic plant status string builder"""
         return f"{super().get_info()}, {self.color} flowers ({self.state})"
 
 
 class PrizeFlower(FloweringPlant):
+    """Build prize flower plant"""
     def __init__(
         self,
         name: str = "Sunflower",
@@ -202,6 +234,7 @@ class PrizeFlower(FloweringPlant):
         return self.prize_pts
 
     def get_info(self) -> str:
+        """Polymorphic plant status string builder"""
         return f"{super().get_info()}, Prize points: {self.prize_pts}"
 
 
@@ -212,4 +245,4 @@ if __name__ == "__main__":
     for i in range(network._garden_count):
         network._gardens[i].grow_all()
         network._gardens[i].print_report()
-    network.GardenStats.print_total_stats(network)
+    network.GardenStats.print_network_stats(network)

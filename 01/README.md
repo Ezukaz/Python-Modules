@@ -57,9 +57,10 @@ Plant                               ← base class
     > **kataPoint:**<br>
     You can base one class on another class. This is called inheritance. The one based upon is the parent while the other is the child. `super()` is used for `__init__` when you want to initialize the parent class's attributes into the child instance. One `__init__` after another will erase the previous `__init__`. In order to prevent this you use `super()`. Nothing else is needed for you to use the parent class's other attributes. You pass like this: `class Class(Parent):`.<br>A getter&setter is needed for getting/setting a different class's encapsulated variable.
 
-6. Staticmethod<br>[Pythonのstaticmethod()とは？意味をわかりやすく簡単に解説](https://trends.codecamp.jp/blogs/media/terminology595)
+6. Staticmethod, classmethod, nested classes, and factory<br>[Pythonのstaticmethod()とは？意味をわかりやすく簡単に解説](https://trends.codecamp.jp/blogs/media/terminology595)<br>[Nested Classes in Python, When and How to Use Them](https://www.stratascratch.com/blog/python-inner-classes-or-using-class-in-a-class)<br>[Pythonでクラスを書くときに知っておきたい `self` と `@classmethod` の違いと使い分け](https://qiita.com/yusuke_hrsm/items/675fa4947b1739869174)<br>[Pythonの「@classmethod」とは？クラスメソッドの使い方を解説](https://saas.n-works.link/programming/python/explaininghowtouseclassmethods)<br>[The Hitchhiker's Guide to Structuring Your Python Project](https://docs.python-guide.org/writing/structure/)
     > **kataPoint:**<br>
     `@staticmethod` is a decorator used to make a method that belongs to the class but doesn't need an instance to be called. Normally, all methods use the instance in a class, therefore, you must always have the instance `self`, as the first parameter. `staticmethod` allows you to make methods that does not need this instance.
+    `@classmethod` is a decorator used to make a method that belongs to the class but doesn't need an instance to be called. Instead it needs itself, the class, as the first parameter. This parameter is called `cls`. We use this to make a class with instances when there are no instances. You normally would need the instance to do anything but a class will receive itself with all the instructions on how to make instances and go on to create a class instance.
 
 More on encapsulation:
 ```
