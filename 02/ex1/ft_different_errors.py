@@ -40,7 +40,7 @@ def garden_operations() -> None:
     finally:
         # finally can be replaced with the "with" command. It automatically
         # closes files that are opened. It is used for any object that has an
-        # __enter__ & __exit__. If you use with there is no need for the
+        # __enter__ & __exit__. If you use "with", there is no need for the
         # f = None guard as it never __enter__
         if f:
             f.close()  # we can .close as most things are objects in python.

@@ -11,8 +11,8 @@ Learn the basics of error handling by using the Exception class.
 1. **ex0 - Exception with try/except**
 2. **ex1 - Different Kinds of exceptions**
 3. **ex2 - Custom Exceptions**
-4. **ex3 - **
-5. **ex4 - **
+4. **ex3 - Using Finally to Cleanup**
+5. **ex4 - Use Raise**
 6. **ex5 - All together now**
 
 ## Resources
@@ -91,13 +91,18 @@ class UserNotFoundError(AppError): """User specific error"""
 
 # Catching AppError will catch both sub-classes
 ```
+6. Dict and Any<br>[Pythonのdict​​（辞書型オブジェクト）とは？作成方法やメソッドを解説](https://www.rstone-jp.com/column/143988/)
+    > *kataPoint:*<br>
+    There are many methods in dict class. Just to name a few:
+    (keys means a list of keys eg. [key1, key2, etc], same for values)
+    (item means key and values pair)
+    fromkeys() - Sets multiple key's default value. eg. fromkeys(keys, 0)
+    update() - Updates the vales of the keys you give it. eg. update({key: value, key: value, etc})
+    get() - Gets the value of a key or a default value you give it if key doesn't exist. eg. get('key', default_val)
+    pop() - Exactly like get but it deletes the item.
+    You can check if a key exists by `if 'key' in dict_obj:
+    keys(), values(), and items() will make a list of all...of them
+    setdefault() - checks for key and creates it with a default value if none
+    clear() - to delete the dict_obj
+    popitem() - to pop the last item
 
-4. Description<br>[link title]()
-    > *kataPoint:*<br>
-    
-5. Description<br>[link title]()
-    > *kataPoint:*<br>
-    
-6. Description<br>[link title]()
-    > *kataPoint:*<br>
-    

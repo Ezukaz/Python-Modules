@@ -22,14 +22,16 @@ def parse_coordinates(coord_str: str) -> Tuple[int, int, int]:
     if len(coords) != 3:
         raise ValueError("Invalid format - expected 'x,y,z'")
     try:
-        return tuple(int(c.strip()) for c in coords)
+        return tuple(int(c) for c in coords)
     except ValueError as e:
-        raise ValueError(str(e))
+        raise ValueError(e)
 
 
 def demonstrate_coordinates() -> None:
     """Demonstrate 3D coordinates and tuple operations."""
     print("=== Game Coordinate System ===")
+    print()
+
     # Create position
     pos = (10, 20, 5)
     print(f"Position created: {pos}")
@@ -37,6 +39,8 @@ def demonstrate_coordinates() -> None:
     origin = (0, 0, 0)
     dist = calculate_distance(origin, pos)
     print(f"Distance between (0, 0, 0) and (10, 20, 5): {dist:.2f}")
+    print()
+
     # Parsing
     print('Parsing coordinates: "3,4,0"')
     try:
@@ -47,17 +51,22 @@ def demonstrate_coordinates() -> None:
             f"{calculate_distance(origin, parsed):.1f}")
     except ValueError as e:
         print(f"Error parsing coordinates: {e}")
+    print()
+
+    # Invalid Parsing
     print('Parsing invalid coordinates: "abc,def,ghi"')
     try:
         parse_coordinates("abc,def,ghi")
     except ValueError as e:
         print(f"Error parsing coordinates: {e}")
-        print(f"Error details - Type: {type(e).__name__}, Args: {e.args}")
+        print(f"Error details - Type: {e.__class__.__name__}, Args: {e.args}")
+    print()
+
     # Unpacking
     print("Unpacking demonstration:")
     x, y, z = parsed
     print(f"Player at x={x}, y={y}, z={z}")
-    print("Coordinates: X={}, Y={}, Z={}".format(x, y, z))
+    print(f"Coordinates: X={x}, Y={y}, Z={z}")
 
 
 if __name__ == "__main__":
