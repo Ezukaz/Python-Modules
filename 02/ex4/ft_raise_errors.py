@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 def check_plant_health(
-        plant_name: str,
-        water_level: int,
-        sunlight_hours: int
+        plant_name: str = "bean",
+        water_level: int = 3,
+        sunlight_hours: int = 5
 ) -> str:
     """ Validate plant health parameters and raise errors if invalid """
     if not plant_name or plant_name == "":
@@ -32,7 +32,7 @@ def test_plant_checks() -> None:
     # Good values
     print("Testing good values...")
     try:
-        result = check_plant_health("tomato", 5, 8)
+        result = check_plant_health()
         print(result)
     except ValueError as e:
         print(f"Error: {e}")

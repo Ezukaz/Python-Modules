@@ -3,7 +3,7 @@
 from typing import List
 
 
-def water_plants(plant_list: List[str | None]) -> None:
+def water_plants(plant_list: List[str | None] = ["corn", "bean"]) -> None:
     """ Water plants with guaranteed cleanup using finally block """
     print("Opening watering system")
 
@@ -26,7 +26,7 @@ def test_watering_system() -> None:
     # Normal case
     print()
     print("Testing normal watering...")
-    water_plants(["tomato", "lettuce", "carrots"])
+    water_plants()
     print("Watering completed successfully!")
     # Error case
     print()

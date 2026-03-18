@@ -15,6 +15,36 @@ Learn the basics of error handling by using the Exception class.
 5. **ex4 - Use Raise**
 6. **ex5 - All together now**
 
+## Instructions
+
+1. flake8 python version check
+2. python3 ex0/ft_first_exception.py (run from root directory)
+   - check if errors are being handled correctly
+   - test different temperature values
+   - try other values other than numbers and see if errors are handled correctly
+3. python3 ex1/ft_different_errors.py
+   - test different types of errors which include:<br>
+**ValueError** - an error when the value has an error such as passing letters to an int<br>
+**ZeroDivisionError** - dividing by zero<br>
+**FileNotFoundError** - passing a file that doesn't exist<br>
+**KeyError** - passing a key that doesn't exist<br>
+**multiple errors** - you can test multiple error cases at once, if any of them are caught then it will process the first error
+4. python3 ex2/ft_custom_errors.py
+   - test custom errors by giving 3 inputs after running the program
+   - there are three types of errors:<br>**GardenErro**r, **PlantError**, and **WaterError**
+   - test error cases which might cause an error for each case
+   - if you can't think of any, here are a few:<br>empty name for plant, no plants in garden, or water level below 1 to get you started
+5. python3 ex3/ft_finally_block.py
+   - test if errors are being handled properly so that it doesn't crash
+   - change the input to None or anything you can think of to make it crash
+   - see if it handles input gracefully
+6. python3 ex4/ft_raise_errors.py
+   - you know the drill
+   - go for it!
+7. python3 ex5/ft_garden_management.py
+   - just a mix of all the previous concepts so try to crash it like usual
+8. Were there any problems? Let me know what I can improve
+
 ## Resources
 
 1. Catching Errors<br>[例外処理（try-except）を活用しよう](https://qiita.com/suipy/items/9d02e197df813f3c2fab)<br>[Pythonの例外処理（try-except）について解説します！](https://techplay.jp/column/1831)<br>[【完全解説！】Pythonの例外処理を基礎から実務レベルまで完全にマスターする](https://zenn.dev/tigrebiz/articles/python-try-exception)

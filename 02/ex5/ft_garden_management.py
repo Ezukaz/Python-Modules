@@ -93,7 +93,7 @@ def test_garden_management() -> None:
     manager = GardenManager()
 
     print("Adding plants to garden...")
-    manager.add_plant("")
+    manager.add_plant("tomato", 4, 2)
     manager.add_plant()
     manager.add_plant("")  # Should fail
     print()

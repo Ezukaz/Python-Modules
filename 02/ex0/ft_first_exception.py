@@ -2,7 +2,7 @@
 # from typing import Union  # This is needed for Union[float, None]
 # Not needed in current version
 
-def check_temperature(temp_str: str) -> int | None:  # Union[float, None]
+def check_temperature(temp_str: str = "0") -> int | None:  # Union[float, None]
     """Check if temperature string is valid and within safe range (0-40°C)."""
     try:
         temp = int(temp_str)
@@ -24,7 +24,7 @@ def test_temperature_input() -> None:
     print()
     # Good input
     print("Testing temperature: 25")
-    result = check_temperature("25")
+    result = check_temperature()
     if result is not None:
         print(f"Temperature {result}°C is perfect for plants!")
     print()
