@@ -1,22 +1,30 @@
 #!/usr/bin/env python3
 
 import sys
-from typing import Dict, List
 
 
 class NoItemError(BaseException):
     pass
 
 
-def analyze_inventory(arg_inputs: List[str]) -> None:
+def plural(v: int) -> str:
+    return "s" if v != 1 else ""
+
+
+def analyze_inventory(arg_inputs: list[str]) -> None:
     """ Check and print all analytics from a list """
-    inventory: Dict[str, int] = {}
-    for arg in arg_inputs[1:]:
+    inventory: dict[str, dict[str, str | int]] = {}
+    for i, arg in enumerate(arg_inputs[1:]):
         try:
-            item, qty = arg.split(':')
-            conv_str = int(qty)
-            inventory[item] = conv_str
-            if conv_str < 1:
+            item, qty = arg.split(":")
+            str_to_int = int(qty)
+            inventory[item] = {
+                'name': item + f"{i+1}",
+                'type': item,
+                'quantity': str_to_int,
+                'value': 100 + i
+            }
+            if str_to_int < 1:
                 raise NoItemError()
         except (KeyError, ValueError, NoItemError):
             print(f"Invalid item {arg} - skipping")
@@ -25,21 +33,27 @@ def analyze_inventory(arg_inputs: List[str]) -> None:
         print("No valid items were found")
         return
 
-    sorted_items = sorted(inventory.items(), key=lambda x: x[1], reverse=True)
-    total_items = sum(inventory.values())
+    total_items = sum(item['quantity'] for item in inventory.values())
     types = len(inventory)
-    max_item = [max(inventory, key=inventory.get), max(inventory.values())]
-    min_item = [min(inventory, key=inventory.get), min(inventory.values())]
+    # “Where a higher‑order function takes a function pointer, and that
+    # function is short and throwaway” → that’s the classic lambda sweet spot.
+    sorted_dict = dict(
+        sorted(inventory.items(), key=lambda x: x[1]["quantity"], reverse=True)
+    )
+    max_key = max(inventory, key=lambda k: inventory[k]['quantity'])
+    min_key = min(inventory, key=lambda k: inventory[k]['quantity'])
     qty_categories = {}
-    for name, condition in [
-        ('abundant', lambda v: v > 10),
-        ('moderate', lambda v: 5 <= v <= 10),
-        ('scarce', lambda v: v < 5)
+    for state, condition in [
+        ("Abundant", lambda v: v['quantity'] > 10),
+        ("Moderate", lambda v: 5 <= v['quantity'] <= 10),
+        ("Scarce", lambda v: v['quantity'] < 5)
     ]:
-        items = {k: v for k, v in inventory.items() if condition(v)}
+        items = {
+            k: v['quantity'] for k, v in inventory.items() if condition(v)
+        }
         if items:
-            qty_categories[name] = items
-    restock = {k: v for k, v in inventory.items() if v < 2}
+            qty_categories[state] = items
+    restock = [k for k, v in inventory.items() if v['quantity'] < 2]
 
     print("=== Inventory System Analysis ===")
     print(f"Total items in inventory: {total_items}")
@@ -47,27 +61,27 @@ def analyze_inventory(arg_inputs: List[str]) -> None:
     print()
 
     print("=== Current Inventory ===")
-    for k, v in sorted_items:
+    for k, v in sorted_dict.items():
         print(
-            f"{k}: {v} {'units' if v > 1 else 'unit'} "
-            f"({(v / total_items) * 100:.1f}%)"
+            f"{k}: {v['quantity']} unit{plural(v['quantity'])} "
+            f"({(v['quantity'] / total_items) * 100:.1f}%)"
         )
     print()
 
     print("=== Inventory Statisitcs ===")
     print(
-        f"Most abundant: {max_item[0]} ({max_item[1]} "
-        f"{'units' if max_item[1] > 1 else 'unit'})"
+        f"Most abundant: {max_key} ({inventory[max_key]['quantity']} "
+        f"unit{plural(inventory[max_key]['quantity'])})"
     )
     print(
-        f"Least abundant: {min_item[0]} ({min_item[1]} "
-        f"{'units' if min_item[1] > 1 else 'unit'})"
+        f"Least abundant: {min_key} ({inventory[min_key]['quantity']} "
+        f"unit{plural(inventory[min_key]['quantity'])})"
     )
     print()
 
     print("=== Item Categories ===")
-    for category in qty_categories:
-        print(f"{category}: {qty_categories[category]}")
+    for category, category_dict in qty_categories.items():
+        print(f"{category}: {category_dict}")
     print()
 
     print("=== Management Suggestions ===")
@@ -76,7 +90,8 @@ def analyze_inventory(arg_inputs: List[str]) -> None:
 
     print("=== Dictionary Properties Demo ===")
     print(f"Dictionary keys: {', '.join(list(inventory.keys()))}")
-    print(f"Dictionary : {', '.join(map(str, list(inventory.values())))}")
+    print("Dictionary values: ", end="")
+    print(f"{', '.join(list(str(d['quantity']) for d in inventory.values()))}")
     print(
         "Sample lookup - 'sword' in inventory: "
         f"{bool(inventory.get('sword', 0))}"

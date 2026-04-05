@@ -1,4 +1,30 @@
-main.py
+# Python cache
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 
+# Jupyter
+*.ipynb*
+    # .ipynb_checkpoints/ is caught too. No worries
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.venv/
+venv/
+
+# Text files (for this project only)
+# *.txt
+
+# Module 07
+tools/
