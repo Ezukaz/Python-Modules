@@ -22,7 +22,7 @@ class GardenManager:
 
     def add_plant(
             self,
-            name: str = None,
+            name: str = "Rose",
             water: int = 5,
             sun: int = 8
     ) -> None:
@@ -49,7 +49,7 @@ class GardenManager:
         finally:
             print("Closing watering system (cleanup)")
 
-    def check_health(self, name: str = None) -> None:
+    def check_health(self, name: str) -> None:
         """ Check health of plant """
         try:
             plant = self.plants[name]

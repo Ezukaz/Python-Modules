@@ -1,36 +1,50 @@
 #!/usr/bin/env python3
 
-from Card import Card
+from ex0.Card import Card
+from ex1.Consts import CREATURE
 
 
 class CreatureCard(Card):
-    def __init__(self, name: str, cost: int, rarity: str, attack: int, health: int) -> None:
+    def __init__(
+        self,
+        name: str,
+        cost: int,
+        rarity: str,
+        attack: int,
+        health: int
+    ) -> None:
+        """Adds attack and health attributes
+
+        Args:
+            attack (int): Needs to be positive integer
+            health (int): Needs to be positive integer
+
+        Raises:
+            ValueError: If negative integer was passed
+        """
         super().__init__(name, cost, rarity)
         if attack < 0 or health < 0:
             raise ValueError("Attack and health must be positive integers")
         self.attack = attack
         self.health = health
-        self.type = "Creature"
+        self.type = CREATURE
 
     def play(self, game_state: dict) -> dict:
-        playable = self.is_playable(game_state['mana'])
-        card_played = self.name if playable else None
-        mana_used = self.cost if playable else 0
-        effect = "Creature summoned to battlefield" if playable else "Not enough mana"
-        if playable:
-            game_state['mana'] -= self.cost
-            game_state['last_played'] = self
-        return {
-            'card_played': card_played,
-            'mana_used': mana_used,
-            'effect': effect,
-        }
+        effect = f"{self.type.capitalize()} summoned to battlefield"
+        return self._base_play_logic(game_state, effect)
 
     def attack_target(self, target: str) -> dict:
-        combat_resolved = True if target == "Goblin Warrior" else False
+        combat_resolved = self.health > 0
         return {
             'attacker': self.name,
             'target': target,
             'damage_dealt': self.attack,
             'combat_resolved': combat_resolved,
         }
+
+    def get_card_info(self) -> dict:
+        creature_info = super().get_card_info()
+        creature_info['type'] = self.type
+        creature_info['attack'] = self.attack
+        creature_info['health'] = self.health
+        return creature_info
