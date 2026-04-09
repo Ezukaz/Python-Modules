@@ -14,7 +14,7 @@ You will learn about classes and how to use them to create wonderful scalable co
 3. **ex2 - How classes are used to change attributes**
 4. **ex3 - Making multiple instances**
 5. **ex4 - Encapsuling attributes of instances & how to access them**
-6. **ex5 - Adding attributes to an instance**
+6. **ex5 - Adding attributes to an instance** 
 7. **ex6 - How to combine all steps**
 
 **Structure for ex6**
