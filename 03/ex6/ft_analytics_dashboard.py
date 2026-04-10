@@ -61,7 +61,7 @@ def comprehension_demo() -> None:
     print(f"High accuracy players: {total_stats['high_acc_players']}")
     print(f"Best harvester: {total_stats['best_harvester']}")
     print(f"Current highest rank: {total_stats['highest_rank']}")
-    print(f"Rank ranges not currently online: {total_stats["missing_range"]}")
+    print(f"Rank ranges not currently online: {total_stats['missing_range']}")
 
 
 if __name__ == "__main__":

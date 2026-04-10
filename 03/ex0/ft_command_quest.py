@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-"""Exercise 0: Command Quest - Command line argument processor"""
 
 import sys
-from typing import List
 
 
-def process_commands(args: List[str]) -> None:
+def process_commands(args: list[str]) -> None:
     """ Process and display command line arguments """
     print("=== Command Quest ===")
 
-    program_name = args[0] if args else "unknown"
+    program_name = args[0]
     print(f"Program name: {program_name}")
     total_args = len(args)
     if total_args == 1:

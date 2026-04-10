@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
-"""Exercise 1: Score Cruncher - List-based player score analytics"""
 
 import sys
-from typing import List
 
 
-def analyze_scores(score_args: List[str]) -> None:
+def analyze_scores(score_args: list[str]) -> None:
     """ Analyze player scores from command line using lists """
     print("=== Player Score Analytics ===")
 
@@ -14,7 +12,7 @@ def analyze_scores(score_args: List[str]) -> None:
         print("Usage: python3 ft_score_analytics.py <score1> <score2>...")
         return
 
-    scores: List[int] = []
+    scores: list[int] = []
     for arg in score_args[1:]:
         try:
             scores += [int(arg)]
