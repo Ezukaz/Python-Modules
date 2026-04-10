@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-"""Exercise 5: Stream Wizard - Generator-based data streaming"""
 
 from typing import Generator
 
@@ -47,7 +46,7 @@ def demonstrate_streaming(events: int, fib: int, prime: int) -> None:
 
     print("=== Game Data Stream Processor ===\n")
     print(f"Processing {events} game events...\n")
-    for i, [event, level] in enumerate(game_event_stream(events)):
+    for i, (event, level) in enumerate(game_event_stream(events)):
         if i < 3:
             print(event)
         if level > 9:
@@ -71,4 +70,4 @@ def demonstrate_streaming(events: int, fib: int, prime: int) -> None:
     print(", ".join(map(str, list(prime_stream(prime)))))
 
 
-demonstrate_streaming(24, 20, 30)
+demonstrate_streaming(1000, 10, 5)

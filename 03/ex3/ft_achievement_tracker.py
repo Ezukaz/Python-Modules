@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
-"""Exercise 3: Achievement Hunter - Set-based achievement analytics"""
-
-from typing import Set
-
 
 # | Union - everything from both
 # ^ Symmetric difference - what they don't share
-# Opposites
 # & Intersection - only what both share
 # - Difference - what left has that right does not
 # __dunder__ double underscore methods are special methods that Python calls
@@ -14,22 +9,23 @@ from typing import Set
 # powerful in python. The set operators are the same. Normally, those signs
 # are bit-wise operators but under the hood in sets those operators are
 # converted by the dunder methods. Dunder methods are customizable. Dream big
+
 def demonstrate_achievements() -> None:
     """Demonstrate set operations for achievement tracking."""
-    print("=== Achievement Tracker System ===")
-    alice: Set[str] = {
+    print("=== Achievement Tracker System ===\n")
+    alice: set[str] = {
         'first_kill',
         'level_10',
         'treasure_hunter',
         'speed_demon'
     }
-    bob: Set[str] = {
+    bob: set[str] = {
         'first_kill',
         'level_10',
         'boss_slayer',
         'collector'
     }
-    charlie: Set[str] = {
+    charlie: set[str] = {
         'level_10',
         'treasure_hunter',
         'boss_slayer',
@@ -46,11 +42,16 @@ def demonstrate_achievements() -> None:
     common_all = alice & bob & charlie  # Intersection operator
     print()
     print(f"Common to all players: {common_all}")
-    rares = {
-        ach for player in (alice, bob, charlie)
-        for ach in player
-        if sum(1 for p in (alice, bob, charlie) if ach in p) == 1
-    }
+    players = (alice, bob, charlie)
+    # rares = {
+    #     ach for player in players for ach in player
+    #     if sum(1 for p in players if ach in p) == 1
+    # }
+    rares = set()
+    for player in players:
+        for achievement in player:
+            if sum(1 for p in players if achievement in p) == 1:
+                rares.add(achievement)
     # Achievement is 1 when found in player, sum all 1s and if the sum is 1,
     # that ach is a rare
     # If there are only two players to compare then ^ would suffice. But

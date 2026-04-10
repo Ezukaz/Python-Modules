@@ -19,7 +19,7 @@ def analyze_inventory(arg_inputs: list[str]) -> None:
             item, qty = arg.split(":")
             str_to_int = int(qty)
             inventory[item] = {
-                'name': item + f"{i+1}",
+                'name': item,
                 'type': item,
                 'quantity': str_to_int,
                 'value': 100 + i
