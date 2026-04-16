@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-
 def recover_data(filename: str) -> None:
-    """Recover ancient data from storage vault"""
     print("=== CYBER ARCHIVES - DATA RECOVERY SYSTEM ===\n")
 
     print(f"Accessing Storage Vault: {filename}")
@@ -12,11 +10,11 @@ def recover_data(filename: str) -> None:
         f.close()
         print("Connection established...\n")
         print("RECOVERED DATA:")
-        lines = content.strip().split("\n")
-        for i, line in enumerate(lines):
-            print(f"[FRAGMENT {i + 1:03d}] {line}")
+        lines = content.split("\n")
+        for line in lines:
+            print(line)
     except FileNotFoundError:
-        print("ERROR: Storage vault not found.")
+        print("ERROR: Storage vault not found. Run data generator first.")
     else:
         print("\nData recovery complete. Storage unit disconnected.")
 

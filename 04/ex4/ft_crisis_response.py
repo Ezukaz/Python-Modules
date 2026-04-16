@@ -15,13 +15,13 @@ def crisis_handler(filename: str) -> None:
         print("STATUS: Crisis handled, system stable\n")
     else:
         print(
-            "SUCCESS: Archive recovered- ``Knowledge preserved for humanity''"
+            "SUCCESS: Archive recovered - ``Knowledge preserved for humanity''"
         )
         print("STATUS: Normal operations resumed\n")
 
 
 if __name__ == "__main__":
-    print("=== CYBER ARCHIVES- CRISIS RESPONSE SYSTEM ===\n")
+    print("=== CYBER ARCHIVES - CRISIS RESPONSE SYSTEM ===\n")
 
     print("CRISIS ALERT: Attempting access to 'lost_archive.txt'...")
     crisis_handler("lost_archive.txt")

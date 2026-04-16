@@ -4,7 +4,6 @@ import sys
 
 
 def stream_test() -> None:
-    """Demonstrate the three sacred data channels"""
     print("=== CYBER ARCHIVES - COMMUNICATION SYSTEM ===")
     archivist_id = input("Input Stream active. Enter archivist ID: ")
     status = input("Input Stream active. Enter status report: ")

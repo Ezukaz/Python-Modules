@@ -30,14 +30,14 @@
 3. Tuple<br>[Lists vs Tuples vs Sets](https://www.youtube.com/watch?v=11WrzU81q68&list=PL8HmoRTjTSlEgS2GsFaDr9zDLC1xD9FZf&index=12)<br>
 [Python tupleの使い方](https://paiza.jp/works/reference/article-python-tuple)
     > **kataPoint:**<br>
-    Using tuples as the key to a dictionary can be useful. There is no such thing as tuple comprehension but if it looks like it then it is tuple + generator expression. Generators use the "()" so that's how tuples got left out of comprehension. You can make a tuple comprehension by generators or just converting a list comprehension to a tuple.
+    Using tuples as the key to a dictionary can be useful. There is no such thing as tuple comprehension but if it looks like it then it is a generator expression. Generators use the "()" so that's how tuples got left out of comprehension. You can make a tuple comprehension by generators or just converting a list comprehension to a tuple.
 4. Set<br>[Pythonのset（セット）とは？基本的な使い方や集合演算をわかりやすく解説](https://www.rstone-jp.com/column/145109/)
     > **kataPoint:**<br>
-    Sets are very useful for making groups that have no duplicates. This means you can combine and filter.
-    **Union |**: combines two sets together.
-    **Difference -**: will get the difference of two sets by subtracting one from the other. Depending on the order you will get varied results.
-    **Intersection &**: self explanatory
-    **Symetrical diff^**: Gets all differences (opposite of intersection)
+    Sets are very useful for making groups that have no duplicates. This means you can combine and filter.<br>
+    **Union (|)**: Combines two sets together. 1+1=2<br>
+    **Difference (-)**: Shows what the first has that the second doesn't<br>
+    **Intersection (&)**: Shows what both have in common<br>
+    **Symetrical diff (^)**: Gets all differences (opposite of intersection)
 5. Dict<br>[Dictionaries](https://www.youtube.com/watch?v=4t10v2QmTHU&list=PL8HmoRTjTSlEgS2GsFaDr9zDLC1xD9FZf&index=13)<br>
 [【完全網羅】Python dictについて](https://qiita.com/kubochiro/items/5d5cb57ee071702d15da)
     > **kataPoint:**<br>
@@ -56,11 +56,11 @@
     **dict.fromkeys(keys, value)**: sets a value for all keys in a list<br>
     **dict.popitem()**: pops random item<br>
     **dict.setdefault(key, default)**: exactly the same as setdefault but is method call on class (they are the same)
-6. Generator<br>[Generators](https://www.youtube.com/watch?v=GWZf_B129zs)<br>
+1. Generator<br>[Generators](https://www.youtube.com/watch?v=GWZf_B129zs)<br>
 [Pythonのイテレータとジェネレータ](https://qiita.com/tomotaka_ito/items/35f3eb108f587022fa09)
     > **kataPoint:**<br>
     Uses the yield to return while keeping a savepoint for the next iteration. next() is called upon to get the next yield value. By using a for loop you do not need to call on next(). A generator is greatly treasured for performance boosts as it does not store all values and returns one at a time. By understanding generators, and combining them with comprehensions, you will be undefeatable ;\)
-7. Comprehension<br>[List Comprehensions](youtube.com/watch?v=DUnY6l482Lk&list=PL8HmoRTjTSlEgS2GsFaDr9zDLC1xD9FZf&index=10&pp=iAQB)<br>
+1. Comprehension<br>[List Comprehensions](youtube.com/watch?v=DUnY6l482Lk&list=PL8HmoRTjTSlEgS2GsFaDr9zDLC1xD9FZf&index=10&pp=iAQB)<br>
 [List Comprehensions](https://realpython.com/list-comprehension-python/)
     > **kataPoint:**<br>
     Comprehensions not only make code more readable by having only one line, they also are better in performance. However, they can become less readable if you have multiple conditions. In this case, you might consider using a normal for loop unless performance is the higher priority. Read the second link. I highly recommend the information.

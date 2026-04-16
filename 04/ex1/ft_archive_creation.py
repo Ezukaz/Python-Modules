@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-
 def create_archive(filename: str) -> None:
-    """Create new archive with preservation data"""
     entries = [
         "New quantum algorithm discovered",
         "Efficiency increased by 347%",
@@ -13,9 +11,12 @@ def create_archive(filename: str) -> None:
     f = open(filename, 'w')
     print("Storage unit created successfully...\n")
     print("Inscribing preservation data...")
-    for i, entry in enumerate(entries):
-        f.write(entry + "\n")
-        print(f"[ENTRY {i + 1:03d}] {entry}")
+    i = 0
+    for entry in entries:
+        i += 1
+        format_entry = f"[ENTRY {i:03d}] {entry}"
+        f.write(format_entry + "\n")
+        print(format_entry)
     f.close()
     print("\nData inscription complete. Storage unit sealed.")
     print(f"Archive '{filename}' ready for long-term preservation.")

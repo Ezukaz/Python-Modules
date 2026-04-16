@@ -3,19 +3,15 @@
 def secure_vault() -> None:
     print("\nSECURE EXTRACTION:")
     try:
-        with open("vault_data.txt") as f:
+        with open("classified_data.txt") as f:
             for line in f:
-                print(f"[CLASSIFIED] {line.strip()}")
-    except FileNotFoundError as e:
-        print(f"Error: {e} I need sys to out to stderr!!!!")
-
-    print("\nSECURE PRESERVATION:")
-    try:
-        with open("vault_data.txt", 'w') as f:
-            f.write("New security protocols archived")
+                print(line)
+        print("\nSECURE PRESERVATION:")
+        with open("classified_data.txt", 'w') as f:
+            f.write("[CLASSIFIED] New security protocols archived")
         print("[CLASSIFIED] New security protocols archived")
-    except PermissionError as e:
-        print(f"Error: {e} I need sys to out to stderr!!!!")
+    except (FileNotFoundError, PermissionError) as e:
+        print(f"Error: {e}")
     finally:
         print("Vault automatically sealed upon completion")
 
