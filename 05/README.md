@@ -29,3 +29,17 @@
     > **kataPoint:**<br>
 
 ## AMA
+
+1. *"How does method overriding enable the same processing interface to
+handle completely different data types? What makes this approach
+more powerful than separate processing functions?"*
+> Answer
+2. *"How does polymorphism allow the StreamProcessor to handle different
+stream types without knowing their specific implementations? What
+are the benefits of this design approach?"*
+> Answer
+3. *"How does the combination of method overriding and subtype
+polymorphism enable building scalable, maintainable data processing
+systems? What real-world engineering problems does this approach
+solve?"*
+> Answer

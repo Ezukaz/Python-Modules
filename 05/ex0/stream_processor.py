@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import Any
+from typing import Any, List, Optional
 from abc import ABC, abstractmethod
 
 
@@ -18,24 +18,12 @@ class DataProcessor(ABC):
 
 
 class NumericProcessor(DataProcessor):
-    def validate(self, data: Any) -> bool:
-        try:
-            for num in data:
-                int(num)
-            if len(data):
-                return True
-            return False
-        except TypeError:
-            return False
-        except Exception:
-            return False
+    def validate(self, data: List[int]) -> bool:
+        return len(data) > 0
 
-    def process(self, data: Any) -> str:
-        try:
-            if not self.validate(data):
-                raise TypeError("Invalid input")
-        except TypeError as e:
-            return f"Operation aborted: {e}"
+    def process(self, data: List[int]) -> str:
+        if not self.validate(data):
+            raise ValueError("Invalid input")
         count = len(data)
         total = sum(data)
         return (
@@ -45,17 +33,12 @@ class NumericProcessor(DataProcessor):
 
 
 class TextProcessor(DataProcessor):
-    def validate(self, data: Any) -> bool:
-        if len(data):
-            return True
-        return False
+    def validate(self, data: str) -> bool:
+        return len(data) > 0
 
-    def process(self, data: Any) -> str:
-        try:
-            if not self.validate(data):
-                raise ValueError("Invalid input")
-        except (TypeError, ValueError) as e:
-            return f"Operation aborted: {e}"
+    def process(self, data: str) -> str:
+        if not self.validate(data):
+            raise ValueError("Invalid input")
         return (
             f"Processed text: {len(data)} characters, "
             f"{len(data.split())} words"
@@ -63,66 +46,77 @@ class TextProcessor(DataProcessor):
 
 
 class LogProcessor(DataProcessor):
-    def validate(self, data: Any) -> bool:
-        if ("ERROR" in data or "INFO" in data) and ": " in data:
-            if data[0] != ":" and data[-2] != ":":
-                return True
+    """Warning: index() will raise ValueError when substring is not found"""
+    def validate(self, data: str) -> bool:
+        """Returns:
+            bool: True if "ERROR: " or "INFO: " is in data and is not at the
+            end of the str, else False
+        """
+        if "ERROR: " not in data and "INFO: " not in data:
+            return False
+        hit = "ERROR: " if "ERROR: " in data else "INFO: "
+        if data.index(hit) != len(data) - len(hit):
+            return True
         return False
 
-    def process(self, data: Any) -> str:
-        try:
-            if not self.validate(data):
-                raise ValueError("Invalid input")
-        except (TypeError, ValueError) as e:
-            return f"Operation aborted: {e}"
-        first_half = data.split(": ")[0]
-        second_half = data.split(": ")[1]
-        return (
-            f"[{"ALERT" if "ERROR" in data else "INFO"}] "
-            f"{first_half} level detected: {second_half}"
-        )
+    def process(self, data: str) -> str:
+        if not self.validate(data):
+            raise ValueError("Invalid input")
+        is_error = "ERROR: " in data
+        substr = "ERROR: " if is_error else "INFO: "
+        msg_i = data.index(substr) + len(substr)
+        status = "[ALERT] ERROR" if is_error else "[INFO] INFO"
+        msg = data[msg_i:]
+        return f"{status} level detected: {msg}"
 
 
-def print_factory() -> None:
-    processors_data = [
-        (NumericProcessor(), [1, 2, 3, 4, 5]),
-        (TextProcessor(), "Hello Nexus World"),
-        (LogProcessor(), "ERROR: Connection timeout"),
-    ]
-    process_type = [
-        ("Numeric", "data"),
-        ("Text", "data"),
-        ("Log", "entry"),
-    ]
+def print_factory(inp: Optional[dict] = None) -> Optional[str]:
+    had_inp = inp is not None
+    if not inp:
+        inp = {
+            'nbrlst': [1, 2, 3, 4, 5],
+            'text': "Hello Nexus World",
+            'status_report': "ERROR: Connection timeout",
+        }
+    if len(inp) != 3:
+        print("Not enough inputs")  # I want file=sys.stderr
+        return
 
-    print("=== CODE NEXUS - DATA PROCESSOR FOUNDATION ===")
+    try:
+        processors_data = [
+            (NumericProcessor(), inp['nbrlst'], "Numeric", "data"),
+            (TextProcessor(), inp['text'], "Text", "data"),
+            (LogProcessor(), inp['status_report'], "Log", "entry"),
+        ]
 
-    for i, (processor, data) in enumerate(processors_data):
-        print(f"\nInitializing {process_type[i][0]} Processor...")
-        print(f'Processing data: {repr(data)}')
-        if processor.validate(data):
-            print(
-                f"Validation: {process_type[i][0]} {process_type[i][1]} "
-                "verified"
-            )
+        if not had_inp:
+            print("=== CODE NEXUS - DATA PROCESSOR FOUNDATION ===")
+
+            for processor, data, ptype, entry in processors_data:
+                print(f"\nInitializing {ptype} Processor...")
+                print(f"Processing data: {data}")
+                is_verified = f"{ptype} {entry}" if processor.validate(data) else "Not"
+                print(f"Validation: {is_verified} verified")
+                result = processor.process(data)
+                print(processor.format_output(result))
+
         else:
-            print("Validation: Not verified!")
-        result = processor.process(data)
-        print(processor.format_output(result))
+            print("\n=== Polymorphic Processing Demo ===\n")
+            print("Processing multiple data types through same interface...")
+            i = 0
+            for processor, data, _, _ in processors_data:
+                print(f"Result {i + 1}: {processor.process(data)}")
+                i += 1
 
-    print("\n=== Polymorphic Processing Demo ===\n")
-    print("Processing multiple data types through same interface...")
-
-    inputs = [
-        [3, 2, 1],
-        "Happy monday",
-        "INFO: System ready",
-    ]
-
-    for i, (processor, _) in enumerate(processors_data):
-        print(f"Result {i+1}: {processor.process(inputs[i])}")
-    print("\nFoundation system online. Nexus ready for advanced streams.")
+    except (KeyError, ValueError) as e:
+        print(f"Operation aborted: {e}")
 
 
 if __name__ == "__main__":
     print_factory()
+    print_factory({
+        'nbrlst': [3, 2, 1],
+        'text': "Monday mornings",
+        'status_report': "INFO: System ready",
+    })
+    print("\nFoundation system online. Nexus ready for advanced streams.")
