@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 from .basic import lead_to_gold
 from ..potions import healing_potion
 

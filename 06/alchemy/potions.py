@@ -26,7 +26,11 @@ def invisibility_potion() -> str:
 
 
 def wisdom_potion() -> str:
+    elements = ", ".join([
+        alchemy.create_fire(),
+        alchemy.create_water(),
+        create_earth(),
+        create_air(),
+        ])
     return (
-        f"Wisdom potion brewed with all elements: {alchemy.create_fire()}"
-        f"{alchemy.create_water()}{create_earth()}{create_air()}"
-    )
+        f"Wisdom potion brewed with all elements: {elements}")

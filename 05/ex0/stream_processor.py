@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-
-from typing import Any, List, Optional
+from typing import Any, List, Optional, Union
 from abc import ABC, abstractmethod
 
 
@@ -55,22 +54,28 @@ class LogProcessor(DataProcessor):
         if "ERROR: " not in data and "INFO: " not in data:
             return False
         hit = "ERROR: " if "ERROR: " in data else "INFO: "
-        if data.index(hit) != len(data) - len(hit):
-            return True
-        return False
+        if data.index(hit) != 0 and len(data) == len(hit):
+            return False
+        return True
 
     def process(self, data: str) -> str:
         if not self.validate(data):
             raise ValueError("Invalid input")
         is_error = "ERROR: " in data
-        substr = "ERROR: " if is_error else "INFO: "
+        if is_error:
+            substr = "ERROR: "
+            status = "[ALERT] ERROR"
+        else:
+            substr = "INFO: "
+            status = "[INFO] INFO"
         msg_i = data.index(substr) + len(substr)
-        status = "[ALERT] ERROR" if is_error else "[INFO] INFO"
         msg = data[msg_i:]
         return f"{status} level detected: {msg}"
 
 
-def print_factory(inp: Optional[dict] = None) -> Optional[str]:
+def print_factory(
+    inp: Optional[dict[str, Union[List[int], str]]] = None
+) -> None:
     had_inp = inp is not None
     if not inp:
         inp = {
@@ -79,7 +84,7 @@ def print_factory(inp: Optional[dict] = None) -> Optional[str]:
             'status_report': "ERROR: Connection timeout",
         }
     if len(inp) != 3:
-        print("Not enough inputs")  # I want file=sys.stderr
+        print("Not enough inputs")
         return
 
     try:
@@ -95,7 +100,9 @@ def print_factory(inp: Optional[dict] = None) -> Optional[str]:
             for processor, data, ptype, entry in processors_data:
                 print(f"\nInitializing {ptype} Processor...")
                 print(f"Processing data: {data}")
-                is_verified = f"{ptype} {entry}" if processor.validate(data) else "Not"
+                is_verified = (
+                    f"{ptype} {entry}" if processor.validate(data) else "Not"
+                )
                 print(f"Validation: {is_verified} verified")
                 result = processor.process(data)
                 print(processor.format_output(result))

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 def mkstr(element: str) -> str:
     return f"{element} element created"
 

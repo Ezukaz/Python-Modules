@@ -7,24 +7,24 @@ from ex1.SpellCard import SpellCard
 from ex1.ArtifactCard import ArtifactCard
 from ex3.CardFactory import CardFactory
 import random
+from typing import Any
 
 
-class FantasyCardFactory(CardFactory, CreatureCard, SpellCard, ArtifactCard):
+class FantasyCardFactory(CardFactory):
+
     def __init__(self) -> None:
-        CardFactory.__init__(self)
-        self._supported_types = {}
+        super().__init__()
+        self._supported_types: dict[str, set[str]] = {}
 
     def create_creature(self, name_or_power: str | int | None = None) -> Card:
         default_name = "Dragon"
         default_power = 5
         name = default_name
         power = default_power
-
         if isinstance(name_or_power, str):
             name = name_or_power
         if isinstance(name_or_power, int):
             power = name_or_power
-
         return CreatureCard(name, 5, "Yeah, rare", power, 50)
 
     def create_spell(self, name_or_power: str | int | None = None) -> Card:
@@ -32,29 +32,25 @@ class FantasyCardFactory(CardFactory, CreatureCard, SpellCard, ArtifactCard):
         default_power = 5
         name = default_name
         power = default_power
-
         if isinstance(name_or_power, str):
             name = name_or_power
         if isinstance(name_or_power, int):
             power = name_or_power
-
-        return SpellCard(name, 5, "Yeah, rare", power, DAMAGE)
+        return SpellCard(name, power, "Yeah, rare", DAMAGE)
 
     def create_artifact(self, name_or_power: str | int | None = None) -> Card:
         default_name = "Holy grail"
         default_duration = 5000
         name = default_name
         duration = default_duration
-
         if isinstance(name_or_power, str):
             name = name_or_power
         if isinstance(name_or_power, int):
             duration = name_or_power
-
         return ArtifactCard(name, 5, "Yeah, rare", duration, "+3 damage")
 
-    def create_themed_deck(self, size: int) -> dict:
-        deck = {
+    def create_themed_deck(self, size: int) -> dict[str, Any]:
+        deck: dict[str, list[str]] = {
             CREATURE: [],
             SPELL: [],
             ARTIFACT: [],
@@ -73,9 +69,8 @@ class FantasyCardFactory(CardFactory, CreatureCard, SpellCard, ArtifactCard):
         self.draw_hand(size // 5 + 1)
         return deck
 
-    def add_type(self, category: str, names: list) -> None:
+    def add_type(self, category: str, names: list[str]) -> None:
         """Register a type if none exists and add names to type
-
         Args:
             category (str): Type to register
             names (list): Names to add to type(duplicates will be erased)
@@ -94,9 +89,9 @@ class FantasyCardFactory(CardFactory, CreatureCard, SpellCard, ArtifactCard):
         self.shuffle()
         for _ in range(draw_amount):
             card = self.draw_card()
-            self._hand.append((card.name, card.cost))
+            self._hand.append(card)
 
-    def get_supported_types(self) -> dict:
+    def get_supported_types(self) -> dict[str, Any]:
         return {k + "s": list(v) for k, v in self._supported_types.items()}
 
     def get_factory_name(self) -> str:

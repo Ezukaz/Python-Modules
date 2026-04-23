@@ -5,7 +5,7 @@ from ex4.TournamentPlatform import TournamentPlatform
 
 
 def make_tournament(lineup: TournamentPlatform) -> None:
-    cards_data = [
+    cards_data: list[tuple[str, int, str, str, int, int, str, int]] = [
         ("Fire Dragon", 8, "legend",    "dragon_001",  9, 60, "dragon",  9500),
         ("Ice Golem",   6, "rare",      "golem_042",   5, 80, "witch",   7800),
         ("Shade Rogue", 4, "special",   "rogue_017",   7, 35, "royal",   3600),
@@ -48,6 +48,7 @@ if __name__ == "__main__":
             for i, card in enumerate(arena._cards):
                 if card.id == result['loser']:
                     losers.append(arena._cards.pop(i))
+                    break
         arena._cards += losers
 
         leaderboard = arena.get_leaderboard()

@@ -2,6 +2,7 @@
 
 from ex0.Card import Card
 from ex1.Consts import CREATURE
+from typing import Any
 
 
 class CreatureCard(Card):
@@ -14,11 +15,9 @@ class CreatureCard(Card):
         health: int
     ) -> None:
         """Adds attack and health attributes
-
         Args:
             attack (int): Needs to be positive integer
             health (int): Needs to be positive integer
-
         Raises:
             ValueError: If negative integer was passed
         """
@@ -29,11 +28,11 @@ class CreatureCard(Card):
         self.health = health
         self.type = CREATURE
 
-    def play(self, game_state: dict) -> dict:
+    def play(self, game_state: dict[str, Any]) -> dict[str, str | int | None]:
         effect = f"{self.type.capitalize()} summoned to battlefield"
         return self._base_play_logic(game_state, effect)
 
-    def attack_target(self, target: str) -> dict:
+    def attack_target(self, target: str) -> dict[str, Any]:
         combat_resolved = self.health > 0
         return {
             'attacker': self.name,
@@ -42,7 +41,7 @@ class CreatureCard(Card):
             'combat_resolved': combat_resolved,
         }
 
-    def get_card_info(self) -> dict:
+    def get_card_info(self) -> dict[str, Any]:
         creature_info = super().get_card_info()
         creature_info['type'] = self.type
         creature_info['attack'] = self.attack

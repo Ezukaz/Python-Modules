@@ -34,11 +34,13 @@ clean_check:
 	find . -type d -name "*matrix*"
 	find . -name "*matrix*"
 	find . -name "*poetry*"
+	find . -name "*.png"
 
 # Delete generated files
 cclean:
 	find . -type d -name "*matrix*" -exec rm -rf {} +
 	find . -name "*matrix*" -delete
 	find . -name "*poetry*" -delete
+	find . -name "*.png" -delete
 
 .PHONY: cclean pip poet rune rung env clean_check install_poet

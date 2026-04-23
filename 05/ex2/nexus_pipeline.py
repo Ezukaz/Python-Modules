@@ -1,21 +1,20 @@
 #!/usr/bin/env python3
-
 from typing import List, Any, Union, Protocol
 from abc import ABC, abstractmethod
 
 
 class ProcessingPipeline(ABC):
     def __init__(self) -> None:
-        self._stages = []
+        self._stages: List[ProcessingStage] = []
 
     @abstractmethod
-    def process(self, data: Any) -> Any:
-        ...  # ... shows intent of a placeholder as opposed to 'pass'
+    def process(self, data: Any) -> Union[str, Any]:
+        pass
 
-    def run_pipeline(self, data: Any) -> str:
-        valid = self._stages[0].process(data)
-        trans = self._stages[1].process(valid)
-        return self._stages[2].process(trans)
+    def run_pipeline(self, data: Any) -> Union[str, Any]:
+        for stage in self._stages:
+            data = stage.process(data)
+        return data
 
     def add_stage(self, stage: 'ProcessingStage') -> None:
         self._stages.append(stage)
@@ -31,7 +30,10 @@ class JSONAdapter(ProcessingPipeline):
             print("\nProcessing JSON data through pipeline...")
             print(f"Input: {data}")
             print("Transform: Enriched with metadata and validation")
-            print(f"Output: {self.run_pipeline(data)}")
+            result = self.run_pipeline(data)
+            print(f"Output: {result}")
+            return result
+        raise ValueError("Invalid JSON input")
 
 
 class CSVAdapter(ProcessingPipeline):
@@ -44,7 +46,10 @@ class CSVAdapter(ProcessingPipeline):
             print("\nProcessing CSV data through same pipeline...")
             print(f"Input: {data}")
             print("Transform: Parsed and structured data")
-            print(f"Output: {self.run_pipeline(data)}")
+            result = self.run_pipeline(data)
+            print(f"Output: {result}")
+            return result
+        raise ValueError("Invalid CSV input")
 
 
 class StreamAdapter(ProcessingPipeline):
@@ -57,18 +62,21 @@ class StreamAdapter(ProcessingPipeline):
             print("\nProcessing Stream data through same pipeline...")
             print("Input: Real-time sensor stream")
             print("Transform: Aggregated and filtered")
-            print(f"Output: {self.run_pipeline(data)}")
+            result = self.run_pipeline(data)
+            print(f"Output: {result}")
+            return result
+        raise ValueError("Invalid Stream input")
 
 
 # Literally for type declaration (型宣言)
 # Because we will be able to call on individual stages by having a unified type
 class ProcessingStage(Protocol):
     def process(self, data: Any) -> Any:
-        ...
+        pass
 
 
 class InputStage():
-    def process(self, data: Any) -> Any:
+    def process(self, data: Any) -> Union[str, Any]:
         if isinstance(data, dict):
             required_keys = ["sensor", "value", "unit"]
             if (
@@ -85,7 +93,7 @@ class InputStage():
 
 
 class TransformStage():
-    def process(self, data: Any) -> Any:
+    def process(self, data: Any) -> Union[str, Any]:
         if isinstance(data, dict):
             if data["value"] < 40.0 and data["value"] > -8.0:
                 data["range"] = "(Normal range)"
@@ -99,14 +107,15 @@ class TransformStage():
                 x for x in data if isinstance(x, float) and
                 x < 60.1 and x > -100.1
             ]
+        raise ValueError("Not dict, list, or str")
 
 
 class OutputStage():
-    def process(self, data: Any) -> Any:
+    def process(self, data: Any) -> Union[str, Any]:
         if isinstance(data, dict):
             return (
                 "Processed temperature reading: "
-                f"{data["value"]}{data["unit"]} {data["range"]}"
+                f"{data['value']}{data['unit']} {data['range']}"
             )
         elif isinstance(data, str):
             csv_count = len([x.strip() for x in data.split(",") if x.strip()])
@@ -116,16 +125,17 @@ class OutputStage():
             activity = len(data)
             avg = sum(data) / activity if activity else 0
             return f"Stream summary: {activity} readings, avg: {avg:.1f}°C"
+        raise ValueError("Not dict, list, or str")
 
 
 class NexusManager():
     def __init__(self) -> None:
-        self._pipelines = []
+        self._pipelines: List[ProcessingPipeline] = []
 
     def add_pipeline(self, pipeline: ProcessingPipeline) -> None:
         self._pipelines.append(pipeline)
 
-    def process_data(self, data: List) -> None:
+    def process_data(self, data: List[Any]) -> None:
         try:
             if len(self._pipelines) != len(data):
                 raise ValueError("Data amount must match number of pipes")
@@ -144,8 +154,12 @@ class NexusManager():
 if __name__ == "__main__":
     print("=== CODE NEXUS - ENTERPRIZE PIPELINE SYSTEM ===")
     manager = NexusManager()
-    pipelines = [JSONAdapter("J_1"), CSVAdapter("C_1"), StreamAdapter("S_1")]
-    stages = [InputStage(), TransformStage(), OutputStage()]
+    pipelines: List[ProcessingPipeline] = (
+        [JSONAdapter("J_1"), CSVAdapter("C_1"), StreamAdapter("S_1")]
+    )
+    stages: List[ProcessingStage] = (
+        [InputStage(), TransformStage(), OutputStage()]
+    )
     for pipe in pipelines:
         for stage in stages:
             pipe.add_stage(stage)
@@ -160,7 +174,7 @@ if __name__ == "__main__":
 
     print("\n=== Multi-Format Data Processing ===")
     input_data = [
-        {"senso": "temp", "value": 23.5, "unit": "°C"},
+        {"sensor": "temp", "value": 23.5, "unit": "°C"},
         "user,action,timestamp",
         [
             22.5,
@@ -181,6 +195,15 @@ if __name__ == "__main__":
     manager.process_data(input_data)
 
     print("\n=== Pipeline Chaining Demo ===")
+    data = {"sensor": "temp", "value": 25.0, "unit": "°C"}
+
+    try:
+        result = pipelines[0].process(data)
+        result = pipelines[1].process(result)
+        result = pipelines[2].process([result])
+        print(f"\nFinal chained result: {result}")
+    except Exception as e:
+        print(f"\nChaining failed: {e}")
     print("Pipeline A -> Pipeline B -> Pipeline C")
     print("Data flow: Raw -> Processed -> Analyzed -> Stored")
 

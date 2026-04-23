@@ -2,6 +2,7 @@
 
 from ex0.Card import Card
 from ex1.Consts import ARTIFACT
+from typing import Any
 
 
 class ArtifactCard(Card):
@@ -24,7 +25,7 @@ class ArtifactCard(Card):
         self.effect = effect
         self.type = ARTIFACT
 
-    def play(self, game_state: dict) -> dict:
+    def play(self, game_state: dict[str, Any]) -> dict[str, str | int | None]:
         self.activate_ability()
         effect_turns = (
             "Permanent" if self.durability <= 0
@@ -33,7 +34,7 @@ class ArtifactCard(Card):
         effect = f"{effect_turns}: {self.effect} per turn"
         return self._base_play_logic(game_state, effect)
 
-    def activate_ability(self) -> dict:
+    def activate_ability(self) -> dict[str, Any]:
         return {
             'artifact': self.name,
             'effect': self.effect,
@@ -42,7 +43,7 @@ class ArtifactCard(Card):
             'durability': self.durability
         }
 
-    def get_card_info(self) -> dict:
+    def get_card_info(self) -> dict[str, Any]:
         artifact_info = super().get_card_info()
         artifact_info['type'] = self.type
         artifact_info['durability'] = self.durability

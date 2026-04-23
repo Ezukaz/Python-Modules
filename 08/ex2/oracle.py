@@ -15,6 +15,7 @@ def add_prefix(is_ok: bool, suffix1: str, suffix2: str) -> str:
 def print_status_msg(is_ok: bool, msg: str) -> None:
     print(f"{get_status(is_ok)} {msg.capitalize()}")
 
+
 def security_check() -> None:
     # all() returns True if all elements are truthy
     checks_ok = all([DATABASE_URL, API_KEY, ZION_ENDPOINT])
@@ -41,11 +42,11 @@ if __name__ == "__main__":
 
     # setting globals
     # getenv to get the global env
-    MATRIX_MODE=os.getenv("MATRIX_MODE", "development")
-    DATABASE_URL=os.getenv("DATABASE_URL")
-    API_KEY=os.getenv("API_KEY")
-    LOG_LEVEL=os.getenv("LOG_LEVEL", "DEBUG")
-    ZION_ENDPOINT=os.getenv("ZION_ENDPOINT")
+    MATRIX_MODE = os.getenv("MATRIX_MODE", "development")
+    DATABASE_URL = os.getenv("DATABASE_URL")
+    API_KEY = os.getenv("API_KEY")
+    LOG_LEVEL = os.getenv("LOG_LEVEL", "DEBUG")
+    ZION_ENDPOINT = os.getenv("ZION_ENDPOINT")
 
     print("\nORACLE STATUS: Reloading the Matrix...")
 

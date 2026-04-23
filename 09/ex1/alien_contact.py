@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, model_validator, Field
 from datetime import datetime
 from enum import Enum
 
@@ -13,27 +13,30 @@ class ContactType(Enum):
 
 
 class AlienContact(BaseModel):
-    contact_id: str
+    contact_id: str = Field(min_length=5, max_length=15)
     timestamp: datetime
-    location: str
+    location: str = Field(min_length=3, max_length=100)
     contact_type: ContactType
-    signal_strength: float
-    duration_minutes: int
-    witness_count: int
-    message_received: str | None = None
-    is_verified: bool
+    signal_strength: float = Field(ge=0.0, le=10.0)
+    duration_minutes: int = Field(ge=1, le=1440)
+    witness_count: int = Field(ge=1, le=100)
+    message_received: str | None = Field(default=None, max_length=500)
+    is_verified: bool = False
 
     @model_validator(mode='after')
     def validate(self) -> 'AlienContact':
         if not self.contact_id.startswith("AC"):
             raise ValueError('Id must start with "AC"')
-        if not self.is_verified:
+        if self.contact_type is ContactType.PHYSICAL and not self.is_verified:
             raise ValueError("Physical contact reports must be verified")
-        if self.witness_count < 3:
+        if (
+            self.contact_type is ContactType.TELEPATHIC
+            and self.witness_count < 3
+        ):
             raise ValueError("Telepathic contact requires at least 3 witness")
         if self.signal_strength > 7 and not self.message_received:
             raise ValueError("Strong signals must include received messages")
-        return self
+        return self  # Must return self
 
 
 def main() -> None:
@@ -51,16 +54,20 @@ def main() -> None:
             message_received="Greetings from Zeta Reticuli",
             is_verified=True,
         )
-        contact.validate()
         print("Valid contact report:")
         print(f"ID: {contact.contact_id}")
         print(f"Type: {contact.contact_type.value}")
         print(f"Location: {contact.location}")
         print(f"Signal: {contact.signal_strength}/10")
-        plural_suf = f"{'s' if contact.duration_minutes != 1 else ''}"
-        print(f"Duration: {contact.duration_minutes} minute{plural_suf}")
+        suffix = f"{'s' if contact.duration_minutes != 1 else ''}"
+        print(f"Duration: {contact.duration_minutes} minute{suffix}")
         print(f"Witnesses: {contact.witness_count}")
         print(f"Message: {contact.message_received}")
+        print()
     except Exception as e:
         print("Expected validation error:")
         print(f"Error: ***{e}***")
+
+
+if __name__ == "__main__":
+    main()

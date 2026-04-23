@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from pydantic import BaseModel, model_validator, field_validator
+from pydantic import BaseModel, model_validator, Field
 from datetime import datetime
 from enum import Enum
 
@@ -14,108 +14,24 @@ class Rank(Enum):
 
 
 class CrewMember(BaseModel):
-    member_id: str
-    name: str
+    member_id: str = Field(min_length=3, max_length=10)
+    name: str = Field(min_length=2, max_length=50)
     rank: Rank
-    age: int
-    specialization: str
-    years_experience: int
+    age: int = Field(ge=18, le=80)
+    specialization: str = Field(min_length=3, max_length=30)
+    years_experience: int = Field(ge=0, le=50)
     is_active: bool = True
-
-    @field_validator("member_id")
-    @classmethod
-    def valid_id(cls, v) -> str:
-        vlen = len(v)
-        if vlen < 3 or vlen > 10:
-            raise ValueError("Must be between 3 and 10 characters long")
-        return v
-
-    @field_validator("name")
-    @classmethod
-    def valid_name(cls, v) -> str:
-        vlen = len(v)
-        if vlen < 2 or vlen > 50:
-            raise ValueError("Must be between 2 and 50 characters long")
-        return v
-
-    @field_validator("age")
-    @classmethod
-    def valid_age(cls, v) -> int:
-        if v > 80 or v < 18:
-            raise ValueError("Must be between 18 and 80 years old")
-        return v
-
-    @field_validator("specialization")
-    @classmethod
-    def valid_special(cls, v) -> str:
-        vlen = len(v)
-        if vlen < 3 or vlen > 30:
-            raise ValueError("Must be between 3 and 30 characters long")
-        return v
-
-    @field_validator("years_experience")
-    @classmethod
-    def valid_xp(cls, v) -> int:
-        if v < 0 or v > 50:
-            raise ValueError("Must have 0 to 50 years of experience")
-        return v
 
 
 class SpaceMission(BaseModel):
-    mission_id: str
-    mission_name: str
-    destination: str
+    mission_id: str = Field(min_length=5, max_length=15)
+    mission_name: str = Field(min_length=3, max_length=100)
+    destination: str = Field(min_length=3, max_length=50)
     launch_date: datetime
-    duration_days: int
-    crew: list[CrewMember]
+    duration_days: int = Field(ge=1, le=3650)
+    crew: list[CrewMember] = Field(min_length=1, max_length=12)
     mission_status: str = "planned"
-    budget_millions: float
-
-    @field_validator("mission_id")
-    @classmethod
-    def valid_id(cls, v) -> str:
-        vlen = len(v)
-        if vlen < 5 or vlen > 15:
-            raise ValueError("Must be between 5 and 15 characters long")
-        return v
-
-    @field_validator("mission_name")
-    @classmethod
-    def valid_name(cls, v) -> str:
-        vlen = len(v)
-        if vlen < 3 or vlen > 100:
-            raise ValueError("Must be between 3 and 100 characters long")
-        return v
-
-    @field_validator("destination")
-    @classmethod
-    def valid_dest(cls, v) -> str:
-        vlen = len(v)
-        if vlen < 3 or vlen > 50:
-            raise ValueError("Must be between 3 and 50 characters long")
-        return v
-
-    @field_validator("duration_days")
-    @classmethod
-    def valid_dur(cls, v) -> int:
-        if v < 1 or v > 3650:
-            raise ValueError("Must be between 1 and 3650 days")
-        return v
-
-    @field_validator("crew")
-    @classmethod
-    def valid_crew(cls, v) -> list[CrewMember]:
-        vlen = len(v)
-        if vlen < 1 or vlen > 12:
-            raise ValueError("Must be between 1 and 12 members")
-        return v
-
-    @field_validator("budget_millions")
-    @classmethod
-    def valid_budget(cls, v) -> float:
-        if v < 1.0 or v > 10000.0:
-            raise ValueError("Must be between 1.0 and 10000.0 million dollars")
-        return v
+    budget_millions: float = Field(ge=1.0, le=10000.0)
 
     @model_validator(mode='after')
     def validation(self) -> 'SpaceMission':
@@ -137,8 +53,10 @@ class SpaceMission(BaseModel):
                 "need 50% experienced crew (5+ years)"
             )
 
-        if not all(True for m in self.crew if m.is_active):
+        if not all(m.is_active for m in self.crew):
             raise ValueError("All crew members must be active")
+
+        return self  # Don't forget to return self
 
 
 def crew_factory() -> list[CrewMember]:
@@ -186,17 +104,20 @@ def main() -> None:
             budget_millions=2500.0,
         )
         print("Valid mission created:")
-        print(f"Mission: {mission.mission_id}")
+        print(f"Mission: {mission.mission_name}")
         print(f"ID: {mission.mission_id}")
         print(f"Destination: {mission.destination}")
         print(f"Duration: {mission.duration_days} days")
         print(f"Budget: ${mission.budget_millions}M")
         print(f"Crew size: {len(mission.crew)}")
-        print(f"Crew members:")
-        print(*(f"- {n} ({r}) - {sp}" for _, n, r, _, sp, _, _ in mission.crew), sep="\n")
+        print("Crew members:")
+        for m in mission.crew:
+            print(f"- {m.name} ({m.rank.value}) - {m.specialization}")
+        print()
     except Exception as e:
         print("Expected validation error:")
         print(f"Error: ***{e}***")
 
 
-main()
+if __name__ == "__main__":
+    main()

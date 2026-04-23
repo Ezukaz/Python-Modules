@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from abc import ABC, abstractmethod
+from typing import Any
 
 
 class Card(ABC):
@@ -10,7 +11,11 @@ class Card(ABC):
         self.rarity = rarity
         self.type = ""
 
-    def _base_play_logic(self, game_state: dict, effect: str) -> dict:
+    def _base_play_logic(
+        self,
+        game_state: dict[str, Any],
+        effect: str
+    ) -> dict[str, str | int | None]:
         playable = self.is_playable(game_state['mana'])
         card_played = self.name if playable else None
         mana_used = self.cost if playable else 0
@@ -25,10 +30,10 @@ class Card(ABC):
         }
 
     @abstractmethod
-    def play(self, game_state: dict) -> dict:
-        ...
+    def play(self, game_state: dict[str, Any]) -> dict[str, str | int | None]:
+        pass
 
-    def get_card_info(self) -> dict:
+    def get_card_info(self) -> dict[str, str | int]:
         return {
             'name': self.name,
             'cost': self.cost,

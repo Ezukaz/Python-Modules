@@ -4,6 +4,7 @@ from ex1.Consts import TOURNAMENT
 from ex0.Card import Card
 from ex2.Combatable import Combatable
 from ex4.Rankable import Rankable
+from typing import Any
 
 
 class TournamentCard(Card, Combatable, Rankable):
@@ -33,12 +34,12 @@ class TournamentCard(Card, Combatable, Rankable):
         self.losses = 0
 
     # Inherit from Card
-    def play(self, game_state: dict) -> dict:
+    def play(self, game_state: dict[str, Any]) -> dict[str, str | int | None]:
         effect = f"{self.type.capitalize()} card summoned to arena"
         return self._base_play_logic(game_state, effect)
 
     # Inherit from Combatable
-    def attack(self, target: str) -> dict:
+    def attack(self, target: str) -> dict[str, str | int]:
         self.inflicted_damage += self.atk
         return {
             'attacker': self.name,
@@ -47,7 +48,7 @@ class TournamentCard(Card, Combatable, Rankable):
             'combat_type': self.combat_type,
         }
 
-    def defend(self, incoming_damage: int) -> dict:
+    def defend(self, incoming_damage: int) -> dict[str, str | int | bool]:
         damage_blocked = incoming_damage * 2 // 3
         damage = incoming_damage - damage_blocked
         self.incurred_damage += damage
@@ -58,7 +59,7 @@ class TournamentCard(Card, Combatable, Rankable):
             'still_alive': damage < self.hp,
         }
 
-    def get_combat_stats(self) -> dict:
+    def get_combat_stats(self) -> dict[str, int]:
         return {
             'damage_given': self.inflicted_damage,
             'damage_taken': self.incurred_damage,
@@ -82,7 +83,7 @@ class TournamentCard(Card, Combatable, Rankable):
         loss = str(losses)
         self.record = win + "-" + loss
 
-    def get_rank_info(self) -> dict:
+    def get_rank_info(self) -> dict[str, list[str] | int | str]:
         return {
             'interfaces': ["Card", "Combatable", "Rankable"],
             'rating': self.rating,
@@ -90,7 +91,7 @@ class TournamentCard(Card, Combatable, Rankable):
         }
 
     # Non-inherit methods
-    def get_tournament_stats(self) -> dict:
+    def get_tournament_stats(self) -> dict[str, str]:
         win, loss = self.record.split("-")
         return {
             'wins': win,

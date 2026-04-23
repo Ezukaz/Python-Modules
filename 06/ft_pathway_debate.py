@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-
-import alchemy
+import alchemy.transmutation
 from alchemy.transmutation.basic import lead_to_gold, stone_to_gem
-from alchemy import philosophers_stone, elixir_of_life
+from alchemy.transmutation.advanced import philosophers_stone, elixir_of_life
 
 
 print("\n=== Pathway Debate Mastery ===")

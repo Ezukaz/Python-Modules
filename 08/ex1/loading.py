@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-
-import importlib.util as implibu, importlib.metadata as implibm
+import importlib.metadata as meta
+import importlib.util as util
 
 
 def has_dependency(dep: str, msg: str) -> bool:
-    if implibu.find_spec(dep):
+    if util.find_spec(dep):
         print(
-            f"[OK] {dep.lower()} ({implibm.version(dep)}) - "
+            f"[OK] {dep.lower()} ({meta.version(dep)}) - "
             f"{msg.capitalize()} ready"
         )
         return True
@@ -14,16 +14,12 @@ def has_dependency(dep: str, msg: str) -> bool:
     return False
 
 
-
 if __name__ == "__main__":
-
     print("\nLOADING STATUS: Loading programs...")
     missing_dep = False
     print("\nChecking dependencies:")
     if not has_dependency("pandas", "data manipulation"):
         missing_dep = True
-    # if not has_dependency("requests", "network access"):
-    #     missing_dep = True
     if not has_dependency("matplotlib", "visualization"):
         missing_dep = True
     if not has_dependency("numpy", "numerical computation"):
@@ -32,9 +28,11 @@ if __name__ == "__main__":
     if missing_dep:
         print("\nTo install dependencies: ", end="")
         print("pip install -r requirements.txt")
-        print(f"                         poetry install (if using Poetry)")
+        print("                         poetry install (if using Poetry)")
     else:
-        import numpy as np, pandas as pd, matplotlib as mp
+        import numpy as np
+        import pandas as pd
+        import matplotlib as mp
         print("\nAnalyzing Matrix data...")
         data = np.random.randn(1000)
         print("Processing 1000 data points...")

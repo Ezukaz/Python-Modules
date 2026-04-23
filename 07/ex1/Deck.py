@@ -3,25 +3,23 @@
 from ex0.Card import Card
 from ex1.Consts import CREATURE, ARTIFACT, SPELL
 import random
+from typing import Any
 
 
 class Deck():
     def __init__(self) -> None:
-        self._deck = []
-        self._hand = []
+        self._deck: list[Card] = []
+        self._hand: list[Card] = []
 
     def add_card(self, card: Card) -> None:
         self._deck.append(card)
 
     def remove_card(self, card_name: str) -> bool:
         """Remove card from deck
-
         Args:
             card_name (str): Card to remove
-
         Returns:
             bool: False if no card was found else True
-
         Raises:
             IndexError if list empty or index out of range. But i don't think
             it will ever trigger
@@ -40,7 +38,7 @@ class Deck():
             raise ValueError("Deck is empty")
         return self._deck.pop(0)
 
-    def get_deck_status(self) -> dict:
+    def get_deck_stats(self) -> dict[str, Any]:
         total = len(self._deck)
         deck_cost = sum(card.cost for card in self._deck)
         return {
