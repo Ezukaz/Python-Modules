@@ -21,10 +21,10 @@ def spell_timer(func: Callable) -> Callable:
 def power_validator(min_power: int) -> Callable:
     def decorator(func: Callable) -> Callable:
         @wraps(func)
-        def wrapper(power: int, *args: list, **kwargs: dict) -> Any:
+        def wrapper(*args: list, power: int, **kwargs: dict) -> Any:
             if power < min_power:
                 return "Insufficient power for this spell"
-            return func(power, *args, **kwargs)
+            return func(power=power, *args, **kwargs)
         return wrapper
     return decorator
 
@@ -89,4 +89,4 @@ if __name__ == "__main__":
     print(guild.validate_mage_name("Klingon"))
     print(guild.validate_mage_name("Kwaigon8"))
     for p, n in zip(test_powers, spell_names):
-        print(guild.cast_spell(p, power=n))
+        print(guild.cast_spell(n, power=p))
