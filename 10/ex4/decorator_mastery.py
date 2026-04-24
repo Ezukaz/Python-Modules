@@ -28,7 +28,9 @@ def power_validator(min_power: int) -> Callable:
 
 
 def retry_spell(max_attempts: int) -> Callable:
-
+    def decorator(func: Callable) -> Callable:
+        @wraps(func)
+        def wrapper()
 
 
 class MageGuild:
